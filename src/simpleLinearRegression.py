@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class SimpleLinearRegression():
+class SimpleLinearRegression:
     def __init__(self, sample_XCordinate, sample__YCordinate, x):
         self.xSet_ = sample_XCordinate
         self.ySet_ = sample__YCordinate

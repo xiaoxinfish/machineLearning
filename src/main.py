@@ -1,4 +1,4 @@
-from simpleLinearRegression import SimpleLinearRegression as SimpleLR
+from src.simpleLinearRegression import SimpleLinearRegression as SimpleLR
 import numpy as np
 
 if __name__ == '__main__':

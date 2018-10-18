@@ -15,8 +15,14 @@ data_dim = 5
 output_dim =1
 # Open,High,Low,Close,Volume
 xy = np.loadtxt('sampleStockData.csv', delimiter = ',')
+'''
+import stockPreProcess as spp
+sd = spp.stock()
+sd.read('000016', 'stockData/000016_20181018.txt')
+xy =
+'''
 xy = xy[::-1] #reverse order (chronically ordered)
-
+print(xy)
 xy = minmax_scale(xy)
 
 x = xy
@@ -39,6 +45,7 @@ for i in range(0, len(y) - seq_length):
 # split to train and testing
 train_size = int(len(dataY) * 0.7)
 test_size = len(dataY) - train_size
+print("test date size:{}".format(test_size))
 trainX, testX = np.array(dataX[0:train_size]), np.array(dataX[train_size:len(dataX)])
 trainY, testY = np.array(dataY[0:train_size]), np.array(dataY[train_size:len(dataY)])
 #input placeholders
@@ -75,9 +82,9 @@ for i in range(1000):
     print(i, l)
 
 testPredict = sess.run(Y_pred, feed_dict = {X: testX})
+plt.plot(testY, 'r')
+plt.plot(testPredict, 'b')
 
-plt.plot(testY)
-plt.plot(testPredict)
 plt.show()
 
 

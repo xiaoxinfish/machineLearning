@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-import logging
+from logger import logger
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,14 +9,8 @@ import time
 import stockPreProcess as spp
 from sklearn.preprocessing import minmax_scale
 
-logger = logging.getLogger()
-logger.setLevel(logging.NOTSET)
-rq = time.strftime('%Y%m%d', time.localtime(time.time()))
-logPath = os.path.dirname(os.getcwd()) + '/logs/'
-logName = logPath + rq + '.log'
-fh = logging.FileHandler(logName, mode = 'w')
-fh.setLevel(logging.DEBUG)
-logger.addHandler(fh)
+logger = logger()
+
 print('hello world!')
 
 # # Reading data
@@ -34,11 +28,11 @@ CSVFileName = 'stockData/' + stockCode + '_Daily_' + time.strftime('%Y-%m-%d', t
 sd = spp.stock()
 sd.readOriginalData(stockCode, originalFileName)
 sd.saveToCSV(stockCode, CSVFileName)
+
 xy = np.loadtxt(CSVFileName, delimiter = ',')
 
 
 xy = xy[::-1] #reverse order (chronically ordered)
-print(xy)
 logger.info(xy)
 xy = minmax_scale(xy)
 
@@ -50,21 +44,18 @@ dataY = []
 for i in range(0, len(y) - seq_length):
     _x = x[i:i + seq_length]
     _y = y[i + seq_length]
-    print('{} -> {}'.format(_x, _y))
+    #print('{} -> {}'.format(_x, _y))
     logger.debug('{} -> {}'.format(_x, _y))
     dataX.append(_x)
     dataY.append(_y)
 
-
-
 # # Training and test datasets
-
 
 # split to train and testing
 train_size = int(len(dataY) * 0.7)
 test_size = len(dataY) - train_size
-print("test date size:{}".format(test_size))
-logging.debug("test date size:{}".format(test_size))
+#print("test date size:{}".format(test_size))
+logger.debug("test date size:{}".format(test_size))
 trainX, testX = np.array(dataX[0:train_size]), np.array(dataX[train_size:len(dataX)])
 trainY, testY = np.array(dataY[0:train_size]), np.array(dataY[train_size:len(dataY)])
 #input placeholders
@@ -98,13 +89,13 @@ sess.run(tf.global_variables_initializer())
 
 for i in range(1000):
     _, l = sess.run([train, loss], feed_dict = {X: trainX, Y: trainY})
-    print(i, l)
-    logging.debug('{}, {}'.format(i, l))
+    #print(i, l)
+    logger.debug('{}, {}'.format(i, l))
 
 testPredict = sess.run(Y_pred, feed_dict = {X: testX})
 plt.plot(testY, 'r')
 plt.plot(testPredict, 'b')
 plt.show()
-logger.removeHandler(fh)
+
 
 

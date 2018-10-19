@@ -9,8 +9,14 @@ class stock:
             dailyData = {}
             for line in fr.readlines():
                 data = re.split(r'\s+', line)
-                if re.match(r'\d{4}/\d{1,2}/\d{1,2}',data[1]):
-                    dailyData[data[1]] = [data[2], data[3], data[4], data[5], data[6]]
+                tradeTime = data[1]
+                if re.match(r'\d{4}/\d{1,2}/\d{1,2}', tradeTime):
+                    priceOpen = data[2]
+                    priceHigh = data[3]
+                    priceLow = data[4]
+                    priceClose = data[5]
+                    vol = int(data[6]) / 10000
+                    dailyData[tradeTime] = [priceOpen, priceHigh, priceLow, priceClose, vol]
             self.stockSet[stockCode] = dailyData
 
     def print(self):

@@ -13,14 +13,18 @@ print('hello world!')
 timesteps = seq_length = 7
 data_dim = 5
 output_dim =1
-# Open,High,Low,Close,Volume
-xy = np.loadtxt('sampleStockData.csv', delimiter = ',')
-'''
+# Open,High,Low,Volume,Close
 import stockPreProcess as spp
+import time
+stockCode = '000016'
+originalFileName = 'stockData/000016_20181018.txt'
+CSVFileName = 'stockData/' + stockCode + '_Daily_' + time.strftime('%Y-%m-%d', time.localtime(time.time()))  + '.csv'
 sd = spp.stock()
-sd.read('000016', 'stockData/000016_20181018.txt')
-xy =
-'''
+sd.readOriginalData(stockCode, originalFileName)
+sd.saveToCSV(stockCode, CSVFileName)
+
+xy = np.loadtxt(CSVFileName, delimiter = ',')
+
 xy = xy[::-1] #reverse order (chronically ordered)
 print(xy)
 xy = minmax_scale(xy)

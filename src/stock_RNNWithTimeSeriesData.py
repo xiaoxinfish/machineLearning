@@ -30,6 +30,7 @@ sd.saveToCSV(stockCode, CSVFileName)
 
 xy = np.loadtxt(CSVFileName, delimiter = ',')
 
+'''
 #为了绘图时，Y轴坐标系在同一范围内，要对原始收盘价，做适配
 y_original = xy[:, [-1]] # y_original 原始收盘价
 y_original_max = np.max(y_original)
@@ -37,6 +38,7 @@ y_original_adapter = [i / y_original_max for i in y_original]
 print(y_original)
 print(y_original_max)
 print(y_original_adapter)
+'''
 
 #xy = xy[::-1] #reverse order (chronically ordered) #不清楚，为什么要倒置一下
 
@@ -65,7 +67,8 @@ test_size = len(dataY) - train_size
 logger.debug("test date size:{}".format(test_size))
 trainX, testX = np.array(dataX[0:train_size]), np.array(dataX[train_size:len(dataX)])
 trainY, testY = np.array(dataY[0:train_size]), np.array(dataY[train_size:len(dataY)])
-y_original_adapter = np.array(y_original_adapter[train_size:len(dataY)])
+
+#y_original_adapter = np.array(y_original_adapter[train_size:len(dataY)])
 
 # # LSTM and Loss
 

@@ -74,7 +74,7 @@ trainY, testY = np.array(dataY[0:train_size]), np.array(dataY[train_size:len(dat
 
 # input placeholders
 X = tf.placeholder(tf.float32, [None, seq_length, data_dim])
-Y = tf.placeholder(tf.float32, [None,1])
+Y = tf.placeholder(tf.float32, [None, 1])
 
 cell = tf.nn.rnn_cell.LSTMCell(name = 'basic_lstm_cell', num_units = output_dim, state_is_tuple = True)
 outputs, _states = tf.nn.dynamic_rnn(cell, X, dtype = tf.float32)
@@ -100,7 +100,14 @@ for i in range(1000):
 
 testPredict = sess.run(Y_pred, feed_dict = {X: testX})
 plt.plot(testY, 'r')
-plt.plot(testPredict[1:], 'b') #发现图形上，testY比testPredict提前了一天。为什么？？？？
+plt.plot(testPredict, 'b')
+total = 0
+for i in range(len(testY)-1):
+    delta = abs((testPredict[i+1] - testY[i]) * 100 / testY[i])
+    total += delta
+    print('test:{} predict:{} delta:{}%'.format(testY[i], testPredict[i+1], delta))
+print('average delta:{}%'.format(total/(len(testY)-1)))
+#plt.plot(testPredict[1:], 'b') #发现图形上，testY比testPredict提前了一天。为什么？？？？
 #plt.plot(y_original_adapter[7:], 'g') #预测值在x坐标上，与实际收盘价，差7天（seq_length)
 plt.show()
 

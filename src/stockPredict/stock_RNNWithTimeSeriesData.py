@@ -4,9 +4,8 @@ from logger import logger
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-import os.path
 import time
-import stockPreProcess as spp
+from stockPredict import stockPreProcess as spp
 from sklearn.preprocessing import minmax_scale
 
 logger = logger()
@@ -22,8 +21,8 @@ output_dim =1
 
 
 stockCode = '000016'
-originalFileName = 'stockData/000016_20181018.txt'
-CSVFileName = 'stockData/' + stockCode + '_Daily_' + time.strftime('%Y-%m-%d', time.localtime(time.time()))  + '.csv'
+originalFileName = 'stockPredict/stockData/000016_20181018.txt'
+CSVFileName = 'stockPredict/stockData/' + stockCode + '_Daily_' + time.strftime('%Y-%m-%d', time.localtime(time.time()))  + '.csv'
 sd = spp.stock()
 sd.readOriginalData(stockCode, originalFileName)
 sd.saveToCSV(stockCode, CSVFileName)
@@ -102,11 +101,11 @@ testPredict = sess.run(Y_pred, feed_dict = {X: testX})
 plt.plot(testY, 'r')
 plt.plot(testPredict, 'b')
 total = 0
-for i in range(len(testY)-1):
-    delta = abs((testPredict[i+1] - testY[i]) * 100 / testY[i])
+for i in range(len(testY)):
+    delta = abs((testPredict[i] - testY[i]) * 100 / testY[i])
     total += delta
-    print('test:{} predict:{} delta:{}%'.format(testY[i], testPredict[i+1], delta))
-print('average delta:{}%'.format(total/(len(testY)-1)))
+    print('test:{} predict:{} delta:{}%'.format(testY[i], testPredict[i], delta))
+print('average delta:{}%'.format(total/len(testY)))
 #plt.plot(testPredict[1:], 'b') #发现图形上，testY比testPredict提前了一天。为什么？？？？
 #plt.plot(y_original_adapter[7:], 'g') #预测值在x坐标上，与实际收盘价，差7天（seq_length)
 plt.show()

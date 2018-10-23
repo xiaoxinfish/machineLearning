@@ -5,7 +5,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-from stockPredict import stockPreProcess as spp
+import stockPreProcess as spp
 from sklearn.preprocessing import minmax_scale
 
 logger = logger()

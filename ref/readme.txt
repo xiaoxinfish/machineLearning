@@ -8,3 +8,5 @@
 
 baidu "数学烂也要学AI"
 张量
+
+pip install --upgrade --ignore-installed -i http://pypi.douban.com/simple/
